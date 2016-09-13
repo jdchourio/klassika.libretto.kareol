@@ -10,7 +10,7 @@ public class UndefinedElement implements IOperaElement {
 	
 	@Override
 	public String toString() {
-		return "Line: " + text;
+		return "Undefined element: " + text;
 	}
 
 }

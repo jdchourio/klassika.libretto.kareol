@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import klassika.libretto.kareol.bean.IOperaElement;
+import klassika.libretto.kareol.bean.Libretto;
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.Source;
 
@@ -25,8 +26,13 @@ public class FileParser {
 		Source source = new Source(new FileReader(inputFilename));
 		List<Element> elementList = source.getAllElements();
 
+		Libretto libretto = new Libretto();
 		for (Element element : elementList) {
 			IOperaElement operaElement = parse(element);
+			libretto.addElement(operaElement);
+//			System.out.println(operaElement);
+		}
+		for (IOperaElement operaElement : libretto.getUndefinedElements()) {
 			System.out.println(operaElement);
 		}
 	}
