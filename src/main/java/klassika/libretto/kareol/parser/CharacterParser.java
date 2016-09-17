@@ -2,6 +2,7 @@ package klassika.libretto.kareol.parser;
 
 import klassika.libretto.kareol.bean.Character;
 import klassika.libretto.kareol.bean.IOperaElement;
+import klassika.libretto.kareol.bean.MultiLanguageElement;
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.Segment;
 import net.htmlparser.jericho.StartTag;
@@ -15,7 +16,7 @@ public class CharacterParser implements IOperaElementParser {
 		return null;
 	}
 	
-	private Character read(Element element) {
+	private MultiLanguageElement read(Element element) {
 		Character character = new Character();
 		String name = element.getContent().toString().trim();
 		character.setName(name);

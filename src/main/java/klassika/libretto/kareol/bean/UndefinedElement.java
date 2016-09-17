@@ -13,4 +13,9 @@ public class UndefinedElement implements IOperaElement {
 		return "Undefined element: " + text;
 	}
 
+	public void addTranslation(int index, IOperaElement translatedLanguageElement) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

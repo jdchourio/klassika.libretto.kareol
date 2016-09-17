@@ -1,19 +1,13 @@
 package klassika.libretto.kareol.bean;
 
 
-public class Indication implements IOperaElement {
-	private String text;
-	
-	public String getText() {
-		return text;
-	}
-	
-	public void setText(String text) {
-		this.text = text;
+public class Indication extends MultiLanguageElement implements IOperaElement {
+	public void setContent(String text) {
+		this.text.set(text);
 	}
 	
 	@Override
 	public String toString() {
-		return "Indication: " + getText();
+		return "Indication: " + text.get(0) + " - " + text.get(1);
 	}
 }

@@ -15,7 +15,7 @@ public class IndicationParser implements IOperaElementParser {
 	private Indication read(Segment segment) {
 		Indication operaElement = new Indication();
 		String name = segment.getChildElements().get(0).getContent().toString();
-		operaElement.setText(name);
+		operaElement.setContent(name);
 		return operaElement;
 	}
 

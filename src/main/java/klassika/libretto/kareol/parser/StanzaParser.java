@@ -8,7 +8,7 @@ public class StanzaParser implements IOperaElementParser {
 
 	public IOperaElement parse(Segment segment) {
 		Stanza stanza = new Stanza();
-		stanza.setText(segment.toString());
+		stanza.setContent(segment.toString());
 		return stanza;
 	}
 

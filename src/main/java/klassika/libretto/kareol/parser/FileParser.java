@@ -24,17 +24,42 @@ public class FileParser {
 
 	public Libretto parseSingleLanguageStanzas(String inputFilename) throws FileNotFoundException, IOException {
 		Element source = new Source(new FileReader(inputFilename)).getFirstElement();
-		List<Element> originalLanguageSource = extractMultipleSingleLanguageElements(source, ORIGINAL_LANGUAGE_INDEX);
-		Element translatedLanguageSource = extractSingleLanguageElements(source, TRANSLATED_LANGUAGE_INDEX);
+		List<IOperaElement> originalLanguageElements = parse(source, ORIGINAL_LANGUAGE_INDEX);
 		
-		List<Segment> textNodes = JerichoUtil.getChildSegments(originalLanguageSource);
-		List<IOperaElement> originalLanguageElements = parse(textNodes);
-
 		Libretto libretto = new Libretto();
 		for (IOperaElement operaElement : originalLanguageElements) {
 			libretto.addElement(operaElement);
 		}
 		return libretto;
+	}
+
+	public Libretto parseMultiLanguageStanzas(String inputFilename) throws FileNotFoundException, IOException {
+		Element source = new Source(new FileReader(inputFilename)).getFirstElement();
+		List<IOperaElement> originalLanguageElements = parse(source, ORIGINAL_LANGUAGE_INDEX);
+		List<IOperaElement> translatedLanguageSource = parse(source, TRANSLATED_LANGUAGE_INDEX);
+		
+		if (originalLanguageElements.size() != translatedLanguageSource.size()) {
+			throw new RuntimeException("Files don't have the same structure");
+		}
+
+		Libretto libretto = new Libretto();
+		for (int index = 0; index < originalLanguageElements.size(); index++) {
+			IOperaElement originalLanguageElement = originalLanguageElements.get(index);
+			IOperaElement translatedLanguageElement = translatedLanguageSource.get(index);
+			
+			originalLanguageElement.addTranslation(TRANSLATED_LANGUAGE_INDEX, translatedLanguageElement);
+			
+//			IOperaElement multiLanguageElement = new MultiLanguageElement(originalLanguageElement, translatedLanguageElement);
+			libretto.addElement(originalLanguageElement);
+		}
+		return libretto;
+	}
+
+	private List<IOperaElement> parse(Element source, int language) {
+		List<Element> originalLanguageSource = extractMultipleSingleLanguageElements(source, language);
+		List<Segment> textNodes = JerichoUtil.getChildSegments(originalLanguageSource);
+		List<IOperaElement> originalLanguageElements = parse(textNodes);
+		return originalLanguageElements;
 	}
 
 	private List<IOperaElement> parse(List<Segment> textNodes) {
@@ -46,13 +71,13 @@ public class FileParser {
 		return elements;
 	}
 	
-	private Element extractSingleLanguageElements(Element source, int languageIndex) {
-		List<Element> tables = source.getAllElements("table");
-		Element languageTable = tables.get(1);
-		List<Element> columns = languageTable.getAllElements("td");
-		return columns.get(languageIndex).getAllElements("font").get(1);
-	}
-
+//	private Element extractSingleLanguageElements(Element source, int languageIndex) {
+//		List<Element> tables = source.getAllElements("table");
+//		Element languageTable = tables.get(1);
+//		List<Element> columns = languageTable.getAllElements("td");
+//		return columns.get(languageIndex).getAllElements("font").get(1);
+//	}
+//
 	private List<Element> extractMultipleSingleLanguageElements(Element source, int languageIndex) {
 		List<Element> elements = new ArrayList<Element>();
 		List<Element> tables = source.getAllElements("table");
