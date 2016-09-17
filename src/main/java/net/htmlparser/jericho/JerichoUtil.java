@@ -1,5 +1,6 @@
 package net.htmlparser.jericho;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,6 +53,15 @@ public class JerichoUtil {
 	    	}
 	    }
 	    return results;
+	}
+
+	public static List<Segment> getChildSegments(List<Element> elements) {
+		List<Segment> toReturn = new ArrayList<Segment>();
+		for (Element source : elements) {
+			List<Segment> children = getChildSegments(source);
+			toReturn.addAll(children);
+		}
+		return toReturn;
 	}
 	
 

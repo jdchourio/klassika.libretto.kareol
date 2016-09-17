@@ -3,6 +3,7 @@ package klassika.libretto.kareol.parser;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import klassika.libretto.kareol.bean.IOperaElement;
@@ -21,24 +22,46 @@ public class FileParser {
 		parserComposite = new ParserComposite();
 	}
 
-	public void parseSingleLanguageStanzas(String inputFilename) throws FileNotFoundException, IOException {
-		Source source = new Source(new FileReader(inputFilename));
-		Element originalLanguageSource = extractSingleLanguageElements(source.getFirstElement(), ORIGINAL_LANGUAGE_INDEX);
+	public Libretto parseSingleLanguageStanzas(String inputFilename) throws FileNotFoundException, IOException {
+		Element source = new Source(new FileReader(inputFilename)).getFirstElement();
+		List<Element> originalLanguageSource = extractMultipleSingleLanguageElements(source, ORIGINAL_LANGUAGE_INDEX);
+		Element translatedLanguageSource = extractSingleLanguageElements(source, TRANSLATED_LANGUAGE_INDEX);
+		
 		List<Segment> textNodes = JerichoUtil.getChildSegments(originalLanguageSource);
+		List<IOperaElement> originalLanguageElements = parse(textNodes);
+
 		Libretto libretto = new Libretto();
-		for (Segment element : textNodes) {
-			IOperaElement operaElement = parserComposite.parse(element);
+		for (IOperaElement operaElement : originalLanguageElements) {
 			libretto.addElement(operaElement);
 		}
-		for (IOperaElement operaElement : libretto.getElements()) {
-			System.out.println(operaElement);
-		}
+		return libretto;
 	}
 
+	private List<IOperaElement> parse(List<Segment> textNodes) {
+		List<IOperaElement> elements = new ArrayList<IOperaElement>();
+		for (Segment element : textNodes) {
+			IOperaElement operaElement = parserComposite.parse(element);
+			elements.add(operaElement);
+		}
+		return elements;
+	}
+	
 	private Element extractSingleLanguageElements(Element source, int languageIndex) {
 		List<Element> tables = source.getAllElements("table");
 		Element languageTable = tables.get(1);
-		return languageTable.getAllElements("td").get(languageIndex).getAllElements("font").get(1);
+		List<Element> columns = languageTable.getAllElements("td");
+		return columns.get(languageIndex).getAllElements("font").get(1);
+	}
+
+	private List<Element> extractMultipleSingleLanguageElements(Element source, int languageIndex) {
+		List<Element> elements = new ArrayList<Element>();
+		List<Element> tables = source.getAllElements("table");
+		Element languageTable = tables.get(1);
+		List<Element> columns = languageTable.getAllElements("td");
+		for (int index = languageIndex; index < columns.size(); index += 2) {
+			elements.addAll(columns.get(index).getAllElements("font"));
+		}
+		return elements;
 	}
 
 //	private void debug(Element element, IOperaElement operaElement) {

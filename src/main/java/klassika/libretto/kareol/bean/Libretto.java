@@ -6,6 +6,8 @@ import java.util.List;
 public class Libretto {
 	private List<IOperaElement> elements = new ArrayList<IOperaElement>();
 	
+	private List<Character> characters = new ArrayList<Character>();
+	
 	private List<IOperaElement> undefinedElements = new ArrayList<IOperaElement>();
 
 	public List<IOperaElement> getElements() {
@@ -18,6 +20,9 @@ public class Libretto {
 
 	public void addElement(IOperaElement element) {
 		this.elements.add(element);
+		if (element instanceof Character) {
+			characters.add((Character)element);
+		}
 		if (element instanceof UndefinedElement) {
 			this.addUndefinedElement(element);
 		}
@@ -29,6 +34,16 @@ public class Libretto {
 	
 	public List<IOperaElement> getUndefinedElements() {
 		return undefinedElements;
+	}
+
+	public void print() {
+		for (IOperaElement operaElement : getElements()) {
+			System.out.println(operaElement);
+		}
+	}
+
+	public List<Character> getCharacters() {
+		return characters;
 	}
 
 }
