@@ -43,4 +43,13 @@ public class JerichoTest {
 		assertEquals(it.size(), 4);
 	}
 
+	@Test
+	public void dealingWithElementSegments() {
+		Source s = new Source("<tr><p>12</p>34<p>Tonto</p>45</tr>");
+		List<Segment> it = JerichoUtil.getChildSegments(s.getFirstElement());
+		Segment segment = it.get(0);
+		System.out.println(segment.getChildElements().get(0).getContent().toString());
+//		assertEquals(it.size(), 4);
+	}
+
 }

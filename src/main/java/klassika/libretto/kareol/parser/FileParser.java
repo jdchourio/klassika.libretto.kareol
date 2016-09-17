@@ -3,22 +3,20 @@ package klassika.libretto.kareol.parser;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import klassika.libretto.kareol.bean.IOperaElement;
 import klassika.libretto.kareol.bean.Libretto;
 import net.htmlparser.jericho.Element;
+import net.htmlparser.jericho.JerichoUtil;
+import net.htmlparser.jericho.Segment;
 import net.htmlparser.jericho.Source;
 
 public class FileParser {
-	private final List<IOperaElementParser> parsers;
+	private final ParserComposite parserComposite;
 
 	public FileParser() {
-		parsers = new ArrayList<IOperaElementParser>();
-		parsers.add(new CharacterParser());
-		parsers.add(new IndicationParser());
-		parsers.add(new DefaultParser());
+		parserComposite = new ParserComposite();
 	}
 
 	public void parse(String inputFilename) throws IOException,
@@ -28,7 +26,7 @@ public class FileParser {
 
 		Libretto libretto = new Libretto();
 		for (Element element : elementList) {
-			IOperaElement operaElement = parse(element);
+			IOperaElement operaElement = parserComposite.parse(element);
 			libretto.addElement(operaElement);
 //			System.out.println(operaElement);
 		}
@@ -36,16 +34,28 @@ public class FileParser {
 			System.out.println(operaElement);
 		}
 	}
-
-	private IOperaElement parse(Element element) {
-		for (IOperaElementParser parser : this.parsers) {
-			IOperaElement operaElement = parser.parse(element);
-			if (operaElement != null) {
-				// debug(element, operaElement);
-				return operaElement;
-			}
+	
+	public void parseSingleLanguageStanzas(String inputFilename) throws FileNotFoundException, IOException {
+		Source source = new Source(new FileReader(inputFilename));
+		Element singleLanguageSource = extractSingleLanguageElements(source.getFirstElement());
+		List<Segment> textNodes = JerichoUtil.getChildSegments(singleLanguageSource);
+		System.out.println("Number of segments: " + textNodes.size());
+		Libretto libretto = new Libretto();
+		for (Segment element : textNodes) {
+			IOperaElement operaElement = parserComposite.parse(element);
+			libretto.addElement(operaElement);
+//			System.out.println(operaElement);
 		}
-		return null;
+		System.out.println("Number of elements: " + libretto.getElements().size());
+		for (IOperaElement operaElement : libretto.getElements()) {
+			System.out.println(operaElement);
+		}
+	}
+
+	private Element extractSingleLanguageElements(Element source) {
+		List<Element> tables = source.getAllElements("table");
+		Element languageTable = tables.get(1);
+		return languageTable.getAllElements("td").get(0).getAllElements("font").get(1);
 	}
 
 //	private void debug(Element element, IOperaElement operaElement) {

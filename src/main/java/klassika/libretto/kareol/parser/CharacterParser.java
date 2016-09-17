@@ -3,16 +3,14 @@ package klassika.libretto.kareol.parser;
 import klassika.libretto.kareol.bean.Character;
 import klassika.libretto.kareol.bean.IOperaElement;
 import net.htmlparser.jericho.Element;
+import net.htmlparser.jericho.Segment;
 import net.htmlparser.jericho.StartTag;
 
 public class CharacterParser implements IOperaElementParser {
 
-	/* (non-Javadoc)
-	 * @see klassika.libretto.kareol.IOperaElementParser#parse(net.htmlparser.jericho.Element)
-	 */
-	public IOperaElement parse(Element element) {
-		if (isValid(element)) {
-			return read(element);
+	public IOperaElement parse(Segment segment) {
+		if (isValid(segment)) {
+			return read(segment.getChildElements().get(0));
 		}
 		return null;
 	}
@@ -24,12 +22,12 @@ public class CharacterParser implements IOperaElementParser {
 		return character;
 	}
 
-	/* (non-Javadoc)
-	 * @see klassika.libretto.kareol.IOperaElementParser#isValid(net.htmlparser.jericho.Element)
-	 */
-	public boolean isValid(Element element) {
-		StartTag startTag = element.getStartTag();
-		String name = startTag.getName();
-		return name.equals("strong");
+	public boolean isValid(Segment segment) {
+		if (segment instanceof StartTag) {
+			StartTag startTag = ((StartTag)segment);
+			String name = startTag.getName();
+			return name.equals("strong");
+		}
+		return false;
 	}
 }

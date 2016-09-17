@@ -6,7 +6,7 @@ public class Application {
 	public static void main(String[] args) throws Exception {
 		String inputFilename = args[0];
 		
-		new FileParser().parse(inputFilename);
+		new FileParser().parseSingleLanguageStanzas(inputFilename);
 	}
 
 }
