@@ -8,7 +8,6 @@ public class StanzaDTO implements Serializable {
 	 */
 	private static final long serialVersionUID = -3400266061113357105L;
 	
-	private long line;
 	private String character;
 	private String lines;
 
