@@ -8,11 +8,10 @@ public class StanzaDTO implements Serializable {
 	 */
 	private static final long serialVersionUID = -3400266061113357105L;
 	
-	private StanzaMetaDTO metadata = new StanzaMetaDTO();
-
+	private long line;
 	private String character;
 	private String lines;
-	
+
 	public String getCharacter() {
 		return character;
 	}
@@ -27,14 +26,6 @@ public class StanzaDTO implements Serializable {
 	
 	public void setLines(String lines) {
 		this.lines = lines;
-	}
-
-	public StanzaMetaDTO getMetadata() {
-		return metadata;
-	}
-
-	public void setMetadata(StanzaMetaDTO metaData) {
-		this.metadata = metaData;
 	}
 
 }

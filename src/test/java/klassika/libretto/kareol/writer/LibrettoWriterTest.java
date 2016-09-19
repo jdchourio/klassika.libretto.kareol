@@ -15,29 +15,24 @@ public class LibrettoWriterTest {
 	}
 
 	private LibrettoDTO givenLibretto() {
-		LibrettoDTO libretto = new LibrettoDTO();
 		ArrayList<String> languages = new ArrayList<String>();
 		languages.add("ITALIAN");
 		languages.add("FRENCH");
-		libretto.setLanguages(languages);
+		
 		List<StanzaGroupDTO> stanzas = new ArrayList<StanzaGroupDTO>();
-		StanzaGroupDTO group1 = new StanzaGroupDTO();
+
 		StanzaDTO stanza1 = new StanzaDTO();
-		StanzaMetaDTO metadata = new StanzaMetaDTO();
-		metadata.setLanguage("ITALIAN");
-		stanza1.setMetadata(metadata);
 		stanza1.setCharacter("Faust");
 		stanza1.setLines("Oh, mio amore!");
+		
 		StanzaDTO stanza2 = new StanzaDTO();
-		StanzaMetaDTO metadata2 = new StanzaMetaDTO();
-		metadata2.setLanguage("ITALIAN");
-		stanza2.setMetadata(metadata2);
 		stanza2.setCharacter("Faust");
 		stanza2.setLines("Oh, mio amore!");
-		group1.setOriginal(stanza1);
-		group1.setTranslated(stanza2);
-		stanzas.add(group1);
+		
+		LibrettoDTO libretto = new LibrettoDTO();
+		libretto.setLanguages(languages);
 		libretto.setStanzas(stanzas);
+		libretto.addGroup(1, stanza1, stanza2);
 		return libretto;
 	}
 

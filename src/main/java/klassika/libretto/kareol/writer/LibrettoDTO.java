@@ -27,4 +27,12 @@ public class LibrettoDTO implements Serializable {
 	public void setLanguages(List<String> languages) {
 		this.languages = languages;
 	}
+	
+	public void addGroup(long line, StanzaDTO original, StanzaDTO translation) {
+		StanzaGroupDTO group = new StanzaGroupDTO();
+		group.setLine(line);
+		group.setOriginal(original);
+		group.setTranslated(translation);
+		this.stanzas.add(group);
+	}
 }
