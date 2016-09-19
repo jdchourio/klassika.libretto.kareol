@@ -10,13 +10,13 @@ public class LibrettoDTO implements Serializable {
 	private static final long serialVersionUID = 3076793652966355135L;
 	
 	private List<String> languages;
-	private List<StanzaDTO> stanzas;
+	private List<StanzaGroupDTO> stanzas;
 
-	public List<StanzaDTO> getStanzas() {
+	public List<StanzaGroupDTO> getStanzas() {
 		return stanzas;
 	}
 
-	public void setStanzas(List<StanzaDTO> stanzas) {
+	public void setStanzas(List<StanzaGroupDTO> stanzas) {
 		this.stanzas = stanzas;
 	}
 
