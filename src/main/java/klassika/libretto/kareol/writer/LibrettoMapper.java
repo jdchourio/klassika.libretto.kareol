@@ -25,15 +25,15 @@ public class LibrettoMapper {
 	}
 
 	private void map(LibrettoDTO bean, Character element, Stanza stanza, long index) {
-//		System.out.println("Mapping: " + element + " - " + stanza);
-		StanzaDTO original = new StanzaDTO();
-		original.setCharacter(element.getText().get(0));
-		original.setLines(stanza.getText().get(0));
-
-		StanzaDTO translation = new StanzaDTO();
-		translation.setCharacter(element.getText().get(1));
-		translation.setLines(stanza.getText().get(1));
-		
+		StanzaDTO original = map(element, stanza, 0);
+		StanzaDTO translation = map(element, stanza, 1);
 		bean.addGroup(index, original, translation);
+	}
+
+	private StanzaDTO map(Character element, Stanza stanza, int languageIndex) {
+		StanzaDTO original = new StanzaDTO();
+		original.setCharacter(element.getText().get(languageIndex));
+		original.setLines(stanza.getText().get(languageIndex));
+		return original;
 	}
 }
